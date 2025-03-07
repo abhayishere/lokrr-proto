@@ -4,7 +4,7 @@ package auth;
 
 option go_package="github.com/abhayishere/lokrr-proto/gen/authpb;authpb";
 
-service AuthService{
+service authService{
     rpc RegisterUser(RegisterRequest)returns (RegisterResponse);
     rpc LoginUser(LoginRequest)returns (LoginResponse);
     rpc ValidateToken(ValidateTokenRequest)returns (ValidateTokenResponse);
