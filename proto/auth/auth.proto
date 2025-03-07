@@ -2,7 +2,7 @@ syntax="proto3";
 
 package auth;
 
-option go_package="/authpb;authpb";
+option go_package="github.com/abhayishere/lokrr-proto/gen/authpb;authpb";
 
 service AuthService{
     rpc RegisterUser(RegisterRequest)returns (RegisterResponse);
