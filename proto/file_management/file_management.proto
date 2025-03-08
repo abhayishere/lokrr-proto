@@ -1,0 +1,57 @@
+syntax="proto3";
+
+package filemanagement;
+
+option go_package="gen/file_management";
+
+service FileManagementService{
+    rpc UploadDocument(UploadRequest)returns (UploadResponse);
+    rpc GetDocument(GetDocumentRequest)returns (GetDocumentResponse);
+    rpc ListDocument(ListDocumentsRequest)returns(ListDocumentsResponse);
+    rpc DeleteDocument(DeleteDocumentRequest)returns(DeleteDocumentResponse);
+}
+
+message UploadRequest{
+    string user_id=1;
+    string document_name=2;
+    string document_type=3;
+    bytes document_content=4;
+}
+
+message UploadResponse{
+    string document_id=1;
+    string message =2;
+}
+
+message GetDocumentRequest {
+  string user_id = 1;
+  string document_id = 2;
+}
+
+message GetDocumentResponse {
+  string document_id = 1;
+  string document_name = 2;
+  string document_type = 3;
+  bytes document_content = 4;
+}
+
+message ListDocumentsRequest {
+  string user_id = 1;
+}
+message ListDocumentsResponse {
+  repeated Document documents = 1;
+}
+message Document {
+  string document_id = 1;
+  string document_name = 2;
+  string document_type = 3;
+}
+
+message DeleteDocumentRequest {
+  string user_id = 1;
+  string document_id = 2;
+}
+message DeleteDocumentResponse {
+  bool success = 1;
+  string message = 2;
+}
