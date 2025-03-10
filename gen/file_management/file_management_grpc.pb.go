@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: proto/file_management/file_management.proto
+// source: file_management/file_management.proto
 
 package file_management
 
@@ -29,7 +29,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FileManagementServiceClient interface {
-	UploadDocument(ctx context.Context, in *UploadRequest, opts ...grpc.CallOption) (*UploadResponse, error)
+	UploadDocument(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[UploadRequest, UploadResponse], error)
 	GetDocument(ctx context.Context, in *GetDocumentRequest, opts ...grpc.CallOption) (*GetDocumentResponse, error)
 	ListDocument(ctx context.Context, in *ListDocumentsRequest, opts ...grpc.CallOption) (*ListDocumentsResponse, error)
 	DeleteDocument(ctx context.Context, in *DeleteDocumentRequest, opts ...grpc.CallOption) (*DeleteDocumentResponse, error)
@@ -43,15 +43,18 @@ func NewFileManagementServiceClient(cc grpc.ClientConnInterface) FileManagementS
 	return &fileManagementServiceClient{cc}
 }
 
-func (c *fileManagementServiceClient) UploadDocument(ctx context.Context, in *UploadRequest, opts ...grpc.CallOption) (*UploadResponse, error) {
+func (c *fileManagementServiceClient) UploadDocument(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[UploadRequest, UploadResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UploadResponse)
-	err := c.cc.Invoke(ctx, FileManagementService_UploadDocument_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &FileManagementService_ServiceDesc.Streams[0], FileManagementService_UploadDocument_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &grpc.GenericClientStream[UploadRequest, UploadResponse]{ClientStream: stream}
+	return x, nil
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FileManagementService_UploadDocumentClient = grpc.ClientStreamingClient[UploadRequest, UploadResponse]
 
 func (c *fileManagementServiceClient) GetDocument(ctx context.Context, in *GetDocumentRequest, opts ...grpc.CallOption) (*GetDocumentResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -87,7 +90,7 @@ func (c *fileManagementServiceClient) DeleteDocument(ctx context.Context, in *De
 // All implementations must embed UnimplementedFileManagementServiceServer
 // for forward compatibility.
 type FileManagementServiceServer interface {
-	UploadDocument(context.Context, *UploadRequest) (*UploadResponse, error)
+	UploadDocument(grpc.ClientStreamingServer[UploadRequest, UploadResponse]) error
 	GetDocument(context.Context, *GetDocumentRequest) (*GetDocumentResponse, error)
 	ListDocument(context.Context, *ListDocumentsRequest) (*ListDocumentsResponse, error)
 	DeleteDocument(context.Context, *DeleteDocumentRequest) (*DeleteDocumentResponse, error)
@@ -101,8 +104,8 @@ type FileManagementServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedFileManagementServiceServer struct{}
 
-func (UnimplementedFileManagementServiceServer) UploadDocument(context.Context, *UploadRequest) (*UploadResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UploadDocument not implemented")
+func (UnimplementedFileManagementServiceServer) UploadDocument(grpc.ClientStreamingServer[UploadRequest, UploadResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method UploadDocument not implemented")
 }
 func (UnimplementedFileManagementServiceServer) GetDocument(context.Context, *GetDocumentRequest) (*GetDocumentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDocument not implemented")
@@ -134,23 +137,12 @@ func RegisterFileManagementServiceServer(s grpc.ServiceRegistrar, srv FileManage
 	s.RegisterService(&FileManagementService_ServiceDesc, srv)
 }
 
-func _FileManagementService_UploadDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UploadRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FileManagementServiceServer).UploadDocument(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: FileManagementService_UploadDocument_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FileManagementServiceServer).UploadDocument(ctx, req.(*UploadRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func _FileManagementService_UploadDocument_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(FileManagementServiceServer).UploadDocument(&grpc.GenericServerStream[UploadRequest, UploadResponse]{ServerStream: stream})
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FileManagementService_UploadDocumentServer = grpc.ClientStreamingServer[UploadRequest, UploadResponse]
 
 func _FileManagementService_GetDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetDocumentRequest)
@@ -214,10 +206,6 @@ var FileManagementService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*FileManagementServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UploadDocument",
-			Handler:    _FileManagementService_UploadDocument_Handler,
-		},
-		{
 			MethodName: "GetDocument",
 			Handler:    _FileManagementService_GetDocument_Handler,
 		},
@@ -230,6 +218,12 @@ var FileManagementService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _FileManagementService_DeleteDocument_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/file_management/file_management.proto",
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "UploadDocument",
+			Handler:       _FileManagementService_UploadDocument_Handler,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "file_management/file_management.proto",
 }
