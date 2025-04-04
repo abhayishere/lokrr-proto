@@ -3,6 +3,7 @@ module github.com/abhayishere/lokrr-proto
 go 1.24.1
 
 require (
+	google.golang.org/genproto/googleapis/api v0.0.0-20250106144421-5f5ef82da422
 	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.5
 )
