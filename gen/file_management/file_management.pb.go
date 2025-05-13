@@ -382,13 +382,14 @@ func (x *ListDocumentsResponse) GetDocuments() []*Document {
 }
 
 type Document struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	DocumentId    string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty"`
-	DocumentName  string                 `protobuf:"bytes,2,opt,name=document_name,json=documentName,proto3" json:"document_name,omitempty"`
-	DocumentType  string                 `protobuf:"bytes,3,opt,name=document_type,json=documentType,proto3" json:"document_type,omitempty"`
-	S3Url         string                 `protobuf:"bytes,4,opt,name=s3_url,json=s3Url,proto3" json:"s3_url,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	DocumentId          string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty"`
+	DocumentName        string                 `protobuf:"bytes,2,opt,name=document_name,json=documentName,proto3" json:"document_name,omitempty"`
+	DocumentType        string                 `protobuf:"bytes,3,opt,name=document_type,json=documentType,proto3" json:"document_type,omitempty"`
+	DocumentDescription string                 `protobuf:"bytes,4,opt,name=document_description,json=documentDescription,proto3" json:"document_description,omitempty"`
+	S3Url               string                 `protobuf:"bytes,5,opt,name=s3_url,json=s3Url,proto3" json:"s3_url,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *Document) Reset() {
@@ -438,6 +439,13 @@ func (x *Document) GetDocumentName() string {
 func (x *Document) GetDocumentType() string {
 	if x != nil {
 		return x.DocumentType
+	}
+	return ""
+}
+
+func (x *Document) GetDocumentDescription() string {
+	if x != nil {
+		return x.DocumentDescription
 	}
 	return ""
 }
@@ -584,13 +592,14 @@ const file_file_management_file_management_proto_rawDesc = "" +
 	"\x14ListDocumentsRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"O\n" +
 	"\x15ListDocumentsResponse\x126\n" +
-	"\tdocuments\x18\x01 \x03(\v2\x18.filemanagement.DocumentR\tdocuments\"\x8c\x01\n" +
+	"\tdocuments\x18\x01 \x03(\v2\x18.filemanagement.DocumentR\tdocuments\"\xbf\x01\n" +
 	"\bDocument\x12\x1f\n" +
 	"\vdocument_id\x18\x01 \x01(\tR\n" +
 	"documentId\x12#\n" +
 	"\rdocument_name\x18\x02 \x01(\tR\fdocumentName\x12#\n" +
-	"\rdocument_type\x18\x03 \x01(\tR\fdocumentType\x12\x15\n" +
-	"\x06s3_url\x18\x04 \x01(\tR\x05s3Url\"Q\n" +
+	"\rdocument_type\x18\x03 \x01(\tR\fdocumentType\x121\n" +
+	"\x14document_description\x18\x04 \x01(\tR\x13documentDescription\x12\x15\n" +
+	"\x06s3_url\x18\x05 \x01(\tR\x05s3Url\"Q\n" +
 	"\x15DeleteDocumentRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1f\n" +
 	"\vdocument_id\x18\x02 \x01(\tR\n" +

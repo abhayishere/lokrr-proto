@@ -49,7 +49,8 @@ message Document {
   string document_id = 1;
   string document_name = 2;
   string document_type = 3;
-  string s3_url = 4;
+  string document_description = 4;
+  string s3_url = 5;
 }
 
 message DeleteDocumentRequest {
