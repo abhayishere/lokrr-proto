@@ -34,8 +34,9 @@ message GetDocumentResponse {
   string document_id = 1;
   string document_name = 2;
   string document_type = 3;
-  string s3_url = 4;
-  bytes document_content = 5;
+  string document_description = 4;
+  string s3_url = 5;
+  bytes document_content = 6;
 }
 
 message ListDocumentsRequest {

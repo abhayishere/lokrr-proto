@@ -210,14 +210,15 @@ func (x *GetDocumentRequest) GetDocumentId() string {
 }
 
 type GetDocumentResponse struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	DocumentId      string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty"`
-	DocumentName    string                 `protobuf:"bytes,2,opt,name=document_name,json=documentName,proto3" json:"document_name,omitempty"`
-	DocumentType    string                 `protobuf:"bytes,3,opt,name=document_type,json=documentType,proto3" json:"document_type,omitempty"`
-	S3Url           string                 `protobuf:"bytes,4,opt,name=s3_url,json=s3Url,proto3" json:"s3_url,omitempty"`
-	DocumentContent []byte                 `protobuf:"bytes,5,opt,name=document_content,json=documentContent,proto3" json:"document_content,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	DocumentId          string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty"`
+	DocumentName        string                 `protobuf:"bytes,2,opt,name=document_name,json=documentName,proto3" json:"document_name,omitempty"`
+	DocumentType        string                 `protobuf:"bytes,3,opt,name=document_type,json=documentType,proto3" json:"document_type,omitempty"`
+	DocumentDescription string                 `protobuf:"bytes,4,opt,name=document_description,json=documentDescription,proto3" json:"document_description,omitempty"`
+	S3Url               string                 `protobuf:"bytes,5,opt,name=s3_url,json=s3Url,proto3" json:"s3_url,omitempty"`
+	DocumentContent     []byte                 `protobuf:"bytes,6,opt,name=document_content,json=documentContent,proto3" json:"document_content,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *GetDocumentResponse) Reset() {
@@ -267,6 +268,13 @@ func (x *GetDocumentResponse) GetDocumentName() string {
 func (x *GetDocumentResponse) GetDocumentType() string {
 	if x != nil {
 		return x.DocumentType
+	}
+	return ""
+}
+
+func (x *GetDocumentResponse) GetDocumentDescription() string {
+	if x != nil {
+		return x.DocumentDescription
 	}
 	return ""
 }
@@ -564,14 +572,15 @@ const file_file_management_file_management_proto_rawDesc = "" +
 	"\x12GetDocumentRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1f\n" +
 	"\vdocument_id\x18\x02 \x01(\tR\n" +
-	"documentId\"\xc2\x01\n" +
+	"documentId\"\xf5\x01\n" +
 	"\x13GetDocumentResponse\x12\x1f\n" +
 	"\vdocument_id\x18\x01 \x01(\tR\n" +
 	"documentId\x12#\n" +
 	"\rdocument_name\x18\x02 \x01(\tR\fdocumentName\x12#\n" +
-	"\rdocument_type\x18\x03 \x01(\tR\fdocumentType\x12\x15\n" +
-	"\x06s3_url\x18\x04 \x01(\tR\x05s3Url\x12)\n" +
-	"\x10document_content\x18\x05 \x01(\fR\x0fdocumentContent\"/\n" +
+	"\rdocument_type\x18\x03 \x01(\tR\fdocumentType\x121\n" +
+	"\x14document_description\x18\x04 \x01(\tR\x13documentDescription\x12\x15\n" +
+	"\x06s3_url\x18\x05 \x01(\tR\x05s3Url\x12)\n" +
+	"\x10document_content\x18\x06 \x01(\fR\x0fdocumentContent\"/\n" +
 	"\x14ListDocumentsRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"O\n" +
 	"\x15ListDocumentsResponse\x126\n" +
